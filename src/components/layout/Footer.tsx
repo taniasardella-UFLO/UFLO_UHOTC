@@ -5,8 +5,8 @@ import { MapPin, Mail } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="w-full snap-end bg-[#0a0f1a] rounded-t-[50px] py-12 px-4 md:px-12 lg:px-24 text-center border-t border-[#8DC63F]/30 shadow-[0_-15px_40px_rgba(141,198,63,0.15)] relative z-20">
-      <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} className="mx-auto w-20 h-20 bg-[#8DC63F] rounded-full flex items-center justify-center text-white font-serif font-bold text-3xl mb-6 shadow-[0_0_30px_rgba(141,198,63,0.4)] border border-[#8DC63F]">
+    <footer className="w-full snap-end bg-slate-800 rounded-t-[50px] py-12 px-4 md:px-12 lg:px-24 text-center border-t border-[#8DC63F]/50 shadow-[0_-20px_60px_rgba(141,198,63,0.25)] relative z-20">
+      <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} className="mx-auto w-20 h-20 bg-[#8DC63F] rounded-full flex items-center justify-center text-white font-serif font-bold text-3xl mb-6 shadow-[0_0_35px_rgba(141,198,63,0.5)] border border-[#8DC63F]">
         U
       </motion.div>
       <h2 className="font-serif text-3xl md:text-4xl text-white font-black mb-2 drop-shadow-md">Contacto / Contact</h2>
