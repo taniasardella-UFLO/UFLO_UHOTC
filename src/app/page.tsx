@@ -37,11 +37,8 @@ export default function Home() {
       <HeroSection />
       <EnvironmentalSection />
       <SocialSection />
-      
-      <div className="flex flex-col min-h-screen">
-        <EducationalSection />
-        <Footer />
-      </div>
+      <EducationalSection />
+      <Footer />
 
     </main>
   );
