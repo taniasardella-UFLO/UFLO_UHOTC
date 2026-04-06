@@ -15,9 +15,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Using 'dark' mode by default to match the Vercel-like requested aesthetics
+  // Light mode matching UFLO Universidad official aesthetic
   return (
-    <html lang="es" className={`${inter.variable} ${montserrat.variable} dark`} style={{colorScheme: 'dark'}}>
+    <html lang="es" className={`${inter.variable} ${montserrat.variable}`} style={{colorScheme: 'light'}}>
       <body className={`${montserrat.className} antialiased scroll-smooth`}>
         {children}
       </body>

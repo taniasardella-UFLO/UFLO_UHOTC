@@ -1,293 +1,351 @@
+"use client";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Globe, Calendar, Users, Award, Droplets, Wind, Mountain, Leaf, Shield, Briefcase, House, GraduationCap, Building2, Microscope, Target, UsersRound, BookOpen, MapPin, Mail, Phone, TriangleAlert } from "lucide-react"
-import DynamicButton from "@/components/DynamicButton"
+
+import { useRef } from "react";
+import Image from "next/image";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { 
+  TreePine, Droplets, Wind, Shield, HeartPulse, Brain, 
+  House, UsersRound, BookOpen, MapPin, Mail, 
+  ThermometerSun, Recycle, AlertTriangle, ChevronDown, CheckCircle2,
+  Microscope, Stethoscope, HardHat
+} from "lucide-react";
+
+import BilingualButton from "@/components/BilingualButton";
+import AnimatedCounter from "@/components/AnimatedCounter";
 
 export default function Home() {
+  const containerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ container: containerRef });
+
+  const mapRotate = useTransform(scrollYProgress, [0, 1], [0, -45]);
+  const mapScale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.2, 1.5]);
+  const mapY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const mapOpacity = useTransform(scrollYProgress, [0, 0.8, 1], [0.8, 0.4, 0.1]);
+
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <main className="relative bg-background text-foreground selection:bg-primary/20">
-      <DynamicButton />
+    <main ref={containerRef} className="relative bg-[#f8fafc] text-slate-900 selection:bg-[#8DC63F]/30 h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth w-full overflow-x-hidden">
 
-      {/* Navigation (v0 original had fixed right nav, replaced by DynamicButton) */}
+      {/* ═══════ FIXED TOP BAR ═══════ */}
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center px-4 md:px-10 py-3 bg-white/80 backdrop-blur-xl border-b border-slate-200">
+        {/* UFLO Logo — Centralized */}
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+          <svg width="80" height="80" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="ufloG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8DC63F"/><stop offset="100%" stopColor="#1e3a5f"/></linearGradient></defs>
+            <circle cx="60" cy="60" r="59" fill="url(#ufloG)"/>
+            <circle cx="60" cy="60" r="55" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1"/>
+            <text x="60" y="54" textAnchor="middle" dominantBaseline="middle" fill="white" fontWeight="900" fontSize="36" fontFamily="Arial,Helvetica,sans-serif">UFLO</text>
+            <text x="60" y="80" textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.95)" fontWeight="700" fontSize="11" fontFamily="Arial,Helvetica,sans-serif" letterSpacing="2.5">UNIVERSIDAD</text>
+          </svg>
+        </motion.div>
+      </nav>
 
-      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a10]/95 via-[#0a0a10]/80 to-[#0a0a10]/95 mix-blend-multiply z-10" />
-          {/* Fallback pattern if image is missing */}
-          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/20 via-background to-background" />
-        </div>
-        
-        <div className="relative z-20 max-w-5xl mx-auto px-6 text-center pt-24">
-          <div className="mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium text-primary backdrop-blur-sm">
-              <span className="h-2 w-2 rounded-full bg-primary animate-pulse"></span>
-              Universidad de Flores
-            </span>
-          </div>
-          
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-7xl font-bold text-white leading-tight animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-            <span className="block text-balance">UFLO presenta el OTC –</span>
-            <span className="block mt-2 text-balance lg:text-5xl text-gray-300">Offshore Technology Conference 2026</span>
-          </h1>
-          
-          <p className="mt-8 text-xl md:text-2xl lg:text-3xl text-gray-400 font-light animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
-            <span className="text-pretty text-primary">Vaca Muerta</span>, impacto en la cuenca neuquina
-          </p>
-          
-          <div className="mt-12 flex flex-wrap justify-center gap-6 text-gray-400 text-sm font-medium animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
-            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary"></span>Houston, Texas</span>
-            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary"></span>Mayo 2026</span>
-            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary"></span>Investigación Académica</span>
-          </div>
-        </div>
-      </section>
+      {/* ═══════ GLOBAL BACKGROUND: 3D MAP ═══════ */}
+      <motion.div 
+        style={{ rotate: mapRotate, scale: mapScale, y: mapY, opacity: 0.25 }}
+        className="fixed inset-0 z-0 origin-center pointer-events-none filter saturate-50 brightness-110"
+      >
+        <Image src="/images/vaca-muerta-super-3d.png" alt="Vaca Muerta 3D" fill className="object-cover object-center" priority quality={100} />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-50 via-transparent to-transparent opacity-60" />
+      </motion.div>
 
-      <section id="intro" className="min-h-screen py-24 lg:py-32 bg-card">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="max-w-3xl">
-            <span className="inline-block text-sm font-semibold text-primary tracking-wider uppercase mb-4">Introducción</span>
-            <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight">
-              Offshore Technology Conference 2026
-            </h2>
-            <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-              La OTC (Offshore Technology Conference) es el evento técnico más prestigioso del sector energético mundial. Cada año, reúne a la élite de la industria offshore para compartir avances tecnológicos, investigaciones científicas y mejores prácticas en exploración y producción de hidrocarburos.
-            </p>
-          </div>
-          
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <FeatureCard icon={Globe} title="Alcance Global" desc="El evento más importante de la industria offshore a nivel mundial" />
-            <FeatureCard icon={Calendar} title="54 Años de Historia" desc="Desde 1969, reuniendo a líderes de la industria energética" />
-            <FeatureCard icon={Users} title="+60,000 Asistentes" desc="Profesionales, académicos e investigadores de todo el mundo" />
-            <FeatureCard icon={Award} title="Excelencia Técnica" desc="Papers revisados por pares y presentaciones de vanguardia" />
-          </div>
-          
-          <blockquote className="mt-16 pl-6 border-l-4 border-primary">
-            <p className="text-xl md:text-2xl font-light italic text-gray-300">
-              "La investigación académica es fundamental para el desarrollo sustentable de la industria energética argentina."
-            </p>
-            <cite className="mt-4 block text-sm text-primary not-italic">— Equipo de Investigación UFLO</cite>
-          </blockquote>
-        </div>
-      </section>
+      {/* =======================================================================
+          SECCIÓN 1: HERO CENTRAL + MÉTRICAS BILINGÜE
+          ======================================================================= */}
+      <section id="hero" className="relative z-10 w-full min-h-[100svh] snap-start snap-always flex flex-col items-center justify-center overflow-hidden py-28 px-4 md:px-12 lg:px-20">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 mix-blend-overlay pointer-events-none" />
 
-      <section id="context" className="min-h-screen py-24 lg:py-32 bg-background border-t border-white/5">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="max-w-3xl">
-            <span className="inline-block text-sm font-semibold text-primary tracking-wider uppercase mb-4">Contexto Geológico y Económico</span>
-            <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight">
-              Vaca Muerta: El gigante energético de la Patagonia
-            </h2>
-            <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-              Ubicada en la Cuenca Neuquina, Vaca Muerta representa una de las formaciones de hidrocarburos no convencionales más importantes del mundo. Su desarrollo está transformando la matriz energética argentina y posicionando al país como potencial exportador neto de energía.
-            </p>
-          </div>
+        <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center text-center gap-8">
           
-          <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <StatBox number="30k" unit="km² de extensión" desc="Segunda reserva de shale gas mundial" />
-            <StatBox number="16B" unit="Barriles de petróleo" desc="Reservas técnicamente recuperables" />
-            <StatBox number="308T" unit="Gas natural (TCF)" desc="Potencial de gas no convencional" />
-            <StatBox number="2010" unit="Año de descubrimiento" desc="Inicio de la era no convencional" />
-          </div>
-        </div>
-      </section>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 backdrop-blur-md px-4 py-2 text-[13px] text-white shadow-xl"
+          >
+            <span className="h-2 w-2 rounded-full bg-[#f97316] animate-pulse" />
+            Horizonte Productivo 2026 • Productive Horizon 2026
+          </motion.div>
+            
+          <motion.h1 initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.8 }}
+            className="font-serif text-6xl md:text-8xl lg:text-9xl font-black text-slate-900 leading-[0.85] drop-shadow-sm"
+          >
+            <span className="block text-transparent bg-clip-text bg-gradient-to-b from-slate-800 to-slate-500">VACA</span>
+            <span className="block text-[#8DC63F]">MUERTA</span>
+          </motion.h1>
 
-      <section id="environmental" className="min-h-screen py-24 lg:py-32 bg-card border-t border-white/5">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="max-w-3xl">
-            <span className="inline-block text-sm font-semibold text-primary tracking-wider uppercase mb-4">Análisis Ambiental</span>
-            <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight">
-              Impacto ambiental: desafíos y soluciones
-            </h2>
-            <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-              El desarrollo de Vaca Muerta plantea importantes consideraciones ambientales. Nuestro análisis académico examina los principales vectores de impacto y las estrategias de mitigación implementadas por la industria.
-            </p>
-          </div>
-          
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <InsightCard icon={Droplets} title="Uso del Agua" status="En monitoreo" statusColor="text-amber-500 bg-amber-500/10" desc="Análisis del consumo hídrico en procesos de fractura hidráulica y estrategias de reutilización" />
-            <InsightCard icon={Wind} title="Emisiones Atmosféricas" status="Atención" statusColor="text-red-500 bg-red-500/10" desc="Monitoreo de gases de efecto invernadero y compuestos orgánicos volátiles" />
-            <InsightCard icon={Mountain} title="Sismicidad Inducida" status="En monitoreo" statusColor="text-amber-500 bg-amber-500/10" desc="Estudios geofísicos sobre actividad sísmica asociada a operaciones de fracking" />
-            <InsightCard icon={Leaf} title="Biodiversidad" status="Favorable" statusColor="text-primary bg-primary/10" desc="Evaluación de impactos en ecosistemas patagónicos y planes de mitigación" />
-          </div>
-          
-          <div className="mt-16 p-6 rounded-2xl bg-secondary/30 border border-primary/20">
-            <div className="flex items-center gap-3 mb-6">
-              <Shield className="h-8 w-8 text-primary" />
-              <h3 className="text-xl font-semibold">Estrategias de Mitigación</h3>
-            </div>
-            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <MitigationItem num="1" text="Tratamiento y reciclaje de agua de retorno (flowback)" />
-              <MitigationItem num="2" text="Implementación de sistemas de detección y reparación de fugas (LDAR)" />
-              <MitigationItem num="3" text="Monitoreo sísmico en tiempo real con redes de sensores" />
-              <MitigationItem num="4" text="Restauración ecológica de áreas afectadas" />
-            </ul>
-          </div>
-        </div>
-      </section>
+          <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.4 }}
+            className="text-base md:text-lg text-slate-700 font-medium max-w-2xl leading-relaxed bg-white/60 backdrop-blur-xl rounded-2xl px-6 py-4 border border-slate-200 shadow-lg"
+          >
+            El aporte estratégico desde la academia: sostenibilidad integral.<br/>
+            <span className="text-[#8DC63F] italic font-semibold">The strategic contribution from academia: integral sustainability.</span>
+          </motion.p>
 
-      <section id="social" className="min-h-screen py-24 lg:py-32 bg-background border-t border-white/5">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="max-w-3xl">
-            <span className="inline-block text-sm font-semibold text-primary tracking-wider uppercase mb-4">Dimensión Social</span>
-            <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight">
-              Impacto social: comunidades en transformación
-            </h2>
-            <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-              El desarrollo de Vaca Muerta ha generado profundas transformaciones sociales en la región. Analizamos tanto las oportunidades de desarrollo como los desafíos que enfrentan las comunidades locales.
-            </p>
+          {/* Bilingual Metrics — each a unique color */}
+          <div className="grid grid-cols-3 gap-4 md:gap-8 mt-4 w-full max-w-3xl">
+            <MetricCard topEs="Producción" topEn="Production" value={530} suffix="k+" sub="Barriles / Barrels" color="#8DC63F" />
+            <MetricCard topEs="Petróleo" topEn="Oil Reserves" value={16} suffix="B" sub="Barriles eq. / BOE" color="#3b82f6" />
+            <MetricCard topEs="Gas Natural" topEn="Natural Gas" value={308} suffix="T" sub="TCF" color="#f97316" />
           </div>
-          
-          <div className="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            <StatBox number="52k+" unit="Empleos directos" desc="+180% desde 2015" icon={Briefcase} />
-            <StatBox number="150k+" unit="Empleos indirectos" desc="Cadena de valor regional" icon={UsersRound} />
-            <StatBox number="35%" unit="Crecimiento poblacional" desc="Añelo y zona de influencia" icon={House} />
-            <StatBox number="12" unit="Centros de formación" desc="Capacitación técnica especializada" icon={GraduationCap} />
-          </div>
-          
-          <div className="mt-16">
-            <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
-              <Building2 className="text-primary h-6 w-6" /> Comunidades Impactadas
+
+          {/* Navigation Buttons — Each a different color, animating ES/EN */}
+          <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.6 }}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-3xl mt-4"
+          >
+            <BilingualButton labelEs="Impacto Ambiental" labelEn="Environmental Impact" color="#22c55e" onClick={() => scrollTo("ambiental")} />
+            <BilingualButton labelEs="Impacto Social" labelEn="Social Impact" color="#3b82f6" onClick={() => scrollTo("social")} />
+            <BilingualButton labelEs="Impacto Educacional I+D" labelEn="Educational Impact R&D" color="#f59e0b" onClick={() => scrollTo("educacional")} />
+          </motion.div>
+
+          {/* ═══ TIMELINE: Evolución Vaca Muerta ═══ */}
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.8 }}
+            className="w-full max-w-3xl mt-6 bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200 p-6 max-h-[35vh] overflow-y-auto no-scrollbar shadow-xl"
+          >
+            <h3 className="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8DC63F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Línea de Tiempo / Timeline
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <CommunityCard title="Añelo" pop="8k → 25k hab." desc="Epicentro del desarrollo. Transformación de pueblo rural a ciudad petrolera." tags={["Infraestructura", "Vivienda"]} />
-              <CommunityCard title="Rincón de los Sauces" pop="42k hab." desc="Ciudad con experiencia previa en industria petrolera convencional." tags={["Diversificación", "Empleo"]} />
-              <CommunityCard title="Neuquén Capital" pop="350k hab." desc="Centro logístico y de servicios empresariales para toda la cuenca." tags={["Conectividad", "Formación"]} />
+            <div className="space-y-4">
+              <TLItem year="2013" color="#8DC63F">EIA confirma reservas globales / EIA confirms global reserves</TLItem>
+              <TLItem year="2016" color="#3b82f6">Impacto territorial en Añelo / Territorial impact on Añelo</TLItem>
+              <TLItem year="2019" color="#f97316">Planificación macroeconómica / Macroeconomic planning</TLItem>
+              <TLItem year="2021" color="#22c55e">Sustentabilidad y modelado hídrico / Sustainability & water modeling</TLItem>
+              <TLItem year="2024" color="#a855f7">Geomecánica de vanguardia / Advanced geomechanics</TLItem>
+              <TLItem year="2026" color="#ef4444">Superpozos: récord histórico / Superwells: historic record</TLItem>
             </div>
+          </motion.div>
+        </div>
+
+        <a href="#ambiental" className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 hover:text-white transition-colors animate-bounce">
+          <ChevronDown className="h-8 w-8" />
+        </a>
+      </section>
+
+      {/* =======================================================================
+          SECCIÓN 2: IMPACTO AMBIENTAL (ES | EN)
+          ======================================================================= */}
+      <section id="ambiental" className="relative z-10 w-full min-h-[100svh] snap-start snap-always flex flex-col justify-center bg-white/40 backdrop-blur-sm py-20 px-4 md:px-8 lg:px-16">
+        <SectionHeader tagEs="Pilar 1: Sostenibilidad" tagEn="Pillar 1: Sustainability" titleEs="Impacto Ambiental" titleEn="Environmental Impact" color="#22c55e" icon={<Microscope className="w-4 h-4"/>} field="Ciencias Naturales / Natural Sciences" />
+
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-0 mt-8">
+          {/* ESPAÑOL */}
+          <div className="border-r-0 lg:border-r border-white/10 pr-0 lg:pr-8 space-y-4">
+            <LangLabel lang="ES" color="#22c55e" />
+            <InfoCard icon={TreePine} title="Ecosistemas y Biodiversidad" color="#22c55e">
+              La expansión de la infraestructura genera fragmentación del hábitat, modificación de la cobertura vegetal, desplazamiento de fauna nativa y simplificación de comunidades biológicas. Estos procesos afectan ecosistemas áridos como el monte y ambientes ribereños, comprometiendo la conectividad ecológica.
+            </InfoCard>
+            <InfoCard icon={Droplets} title="Recursos Hídricos" color="#22c55e">
+              El uso intensivo de agua para fractura hidráulica, el riesgo de contaminación de acuíferos, la generación de efluentes y creciente presión sobre cuencas locales constituyen variables críticas tanto para ecosistemas como para las comunidades.
+            </InfoCard>
+            <InfoCard icon={Wind} title="Emisiones y Calidad del Aire" color="#22c55e">
+              Las operaciones generan emisiones por quema, venteo de gas, tránsito de maquinaria pesada y compuestos orgánicos volátiles. Impactan calidad del aire local y contribuyen al cambio climático a escala global.
+            </InfoCard>
+            <InfoCard icon={Recycle} title="Gestión de Residuos y Gobernanza" color="#22c55e">
+              Sólidos industriales, lodos de perforación y residuos asimilables a urbanos requieren sistemas rigurosos de gestión, tratamiento y disposición final. Se necesita fortalecer los sistemas de monitoreo con bioindicadores.
+            </InfoCard>
+          </div>
+
+          {/* ENGLISH */}
+          <div className="pl-0 lg:pl-8 space-y-4 mt-8 lg:mt-0">
+            <LangLabel lang="EN" color="#22c55e" />
+            <InfoCard icon={TreePine} title="Ecosystems & Biodiversity" color="#166534">
+              Infrastructure expansion generates habitat fragmentation, native fauna displacement, and biological community simplification. These processes affect arid ecosystems and riparian environments, compromising ecological connectivity and ecosystem services.
+            </InfoCard>
+            <InfoCard icon={Droplets} title="Water Resources" color="#166534">
+              Intensive water use for hydraulic fracturing, aquifer contamination risk, effluent generation, and increasing pressure on local basins constitute critical variables for both ecosystems and communities.
+            </InfoCard>
+            <InfoCard icon={Wind} title="Emissions & Air Quality" color="#166534">
+              Operations generate emissions from flaring, gas venting, heavy machinery transit, and volatile organic compounds. They impact local air quality and contribute to global climate change.
+            </InfoCard>
+            <InfoCard icon={Recycle} title="Waste Management & Governance" color="#166534">
+              Industrial solids, drilling muds, and urban-like waste require rigorous management, treatment, and final disposal systems. Monitoring systems with bioindicators must be strengthened.
+            </InfoCard>
           </div>
         </div>
       </section>
 
-      <section id="academic" className="min-h-screen py-24 lg:py-32 bg-card border-t border-white/5">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="max-w-3xl">
-            <span className="inline-block text-sm font-semibold text-primary tracking-wider uppercase mb-4">Contribución Académica</span>
-            <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight">
-              El rol de UFLO en la investigación energética
-            </h2>
-            <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-              La Universidad de Flores aporta rigor científico y perspectiva académica independiente al análisis del desarrollo energético argentino. Nuestro equipo multidisciplinario contribuye con investigación original y formación de profesionales.
-            </p>
-          </div>
-          
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <FeatureCard icon={Microscope} title="Geociencias Aplicadas" desc="Caracterización de reservorios, modelado geomecánico y análisis." />
-            <FeatureCard icon={Target} title="Ingeniería Ambiental" desc="Estudios de impacto, monitoreo de emisiones y remediación." />
-            <FeatureCard icon={UsersRound} title="Ciencias Sociales" desc="Análisis de dinámicas comunitarias y políticas públicas energéticas." />
-            <FeatureCard icon={BookOpen} title="Economía Energética" desc="Modelado económico, análisis de mercados y proyecciones." />
+      {/* =======================================================================
+          SECCIÓN 3: IMPACTO SOCIAL (ES | EN)
+          ======================================================================= */}
+      <section id="social" className="relative z-10 w-full min-h-[100svh] snap-start snap-always flex flex-col justify-center bg-slate-50/60 backdrop-blur-md border-t border-slate-100 py-20 px-4 md:px-8 lg:px-16">
+        <SectionHeader tagEs="Pilar 2: Factor Humano" tagEn="Pillar 2: Human Factor" titleEs="Impacto Social" titleEn="Social Impact" color="#3b82f6" icon={<Stethoscope className="w-4 h-4"/>} field="Psicología Laboral / Occupational Psychology" />
+
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-0 mt-8">
+          {/* ESPAÑOL */}
+          <div className="border-r-0 lg:border-r border-white/10 pr-0 lg:pr-8 space-y-4">
+            <LangLabel lang="ES" color="#3b82f6" />
+            <InfoCard icon={Brain} title="Habilidades Blandas (Soft Skills)" color="#3b82f6">
+              Resulta un desafío en culturas de masculinidad hegemónica que inhiben la expresión emocional y mantienen jerarquías rígidas. Se propone trabajar la inteligencia emocional, el liderazgo, la gestión del tiempo y la motivación en mandos medios y supervisores.
+            </InfoCard>
+            <InfoCard icon={HeartPulse} title="Prevención y Salud Psicológica" color="#3b82f6">
+              Programa interdisciplinario en tres niveles: Prevención Primaria (inducción psicosocial, manejo financiero), Secundaria (detección de consumos problemáticos y ludopatía digital), y Terciaria (protocolos de derivación, eliminación del estigma).
+            </InfoCard>
+            <InfoCard icon={House} title="Relocalización Familiar" color="#3b82f6">
+              Acompañar los procesos de inserción de la fuerza laboral cuando se trasladan a la zona. El éxito de la movilidad requiere adaptación efectiva del entorno familiar al nuevo contexto regional de Añelo.
+            </InfoCard>
           </div>
 
-          <div className="mt-16 text-center pt-10 border-t border-white/10">
-            <p className="text-gray-400 mb-6 flex items-center justify-center gap-2">
-              <TriangleAlert className="h-5 w-5 text-primary" />
-              ¿Interesado en colaborar con nuestra investigación?
-            </p>
-            <button className="px-8 py-4 bg-primary text-black font-semibold rounded-full hover:bg-primary/90 transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/25">
-              Contactar al equipo de investigación
-            </button>
+          {/* ENGLISH */}
+          <div className="pl-0 lg:pl-8 space-y-4 mt-8 lg:mt-0">
+            <LangLabel lang="EN" color="#3b82f6" />
+            <InfoCard icon={Brain} title="Soft Skills Development" color="#1e3a5f">
+              A significant challenge in hegemonic masculinity cultures that inhibit emotional expression and maintain rigid hierarchies. The proposal is to develop emotional intelligence, leadership, time management and motivation in middle management and supervisors.
+            </InfoCard>
+            <InfoCard icon={HeartPulse} title="Prevention & Psychological Health" color="#1e3a5f">
+              Interdisciplinary program in three levels: Primary Prevention (psychosocial induction, financial management), Secondary (detection of problematic consumption and digital gambling), and Tertiary (referral protocols, stigma elimination).
+            </InfoCard>
+            <InfoCard icon={House} title="Family Relocation" color="#1e3a5f">
+              Supporting the workforce and their families through the insertion process when relocating to the area. Mobility success requires effective adaptation of the family unit to Añelo's new regional context.
+            </InfoCard>
           </div>
         </div>
       </section>
-      
-      <footer className="bg-black py-16 border-t border-white/10">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center font-bold text-black border-2 border-primary">U</div>
-              <div>
-                <span className="font-serif text-xl font-bold block text-white">Universidad de Flores</span>
-                <span className="text-sm text-gray-400">Investigación y Desarrollo</span>
-              </div>
+
+      {/* =======================================================================
+          SECCIÓN 4: IMPACTO EDUCACIONAL I+D (ES | EN) + FOOTER
+          ======================================================================= */}
+      <section id="educacional" className="relative z-10 w-full min-h-[100svh] snap-start snap-always flex flex-col pt-20 bg-white/90 backdrop-blur-lg border-t border-slate-100 justify-between">
+        <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-16 mb-10">
+          <SectionHeader tagEs="Pilar 3: Estrategia" tagEn="Pillar 3: Strategy" titleEs="Impacto Educacional I+D" titleEn="Educational Impact R&D" color="#f59e0b" icon={<HardHat className="w-4 h-4"/>} field="Seguridad e Higiene / Industrial Safety" />
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 mt-8">
+            {/* ESPAÑOL */}
+            <div className="border-r-0 lg:border-r border-white/10 pr-0 lg:pr-8 space-y-4">
+              <LangLabel lang="ES" color="#f59e0b" />
+              <InfoCard icon={CheckCircle2} title="Cultura Organizacional y Formación" color="#f59e0b">
+                Las dinámicas corporativas de hiper-agotamiento deben desarticularse. Talleres regulares de gestión emocional y prevención de consumos problemáticos ayudan a redefinir los entornos de seguridad e higiene.
+              </InfoCard>
+              <InfoCard icon={CheckCircle2} title="Sinergia Científica (I+D)" color="#f59e0b">
+                Líneas de investigación conjuntas con CONICET. Estudios longitudinales que miden el nivel de estrés por los diagramas de turnos en la Cuenca Neuquina, generando evidencia científica sólida.
+              </InfoCard>
+              <InfoCard icon={CheckCircle2} title="Alianza Público-Privada" color="#f59e0b">
+                Articulación con operadoras y sindicatos para cruzar variables macroeconómicas con bienestar. Transformar la investigación en protocolos unificados (Best Practices) avalados por la academia.
+              </InfoCard>
             </div>
-            <p className="text-sm text-gray-500 max-w-sm mt-4">
-              Comprometidos con la excelencia académica y la investigación de alto impacto para el desarrollo sustentable.
-            </p>
-          </div>
-          
-          <div>
-            <h4 className="font-semibold text-white mb-4">Enlaces</h4>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li className="hover:text-primary transition-colors cursor-pointer">Sobre UFLO</li>
-              <li className="hover:text-primary transition-colors cursor-pointer">Investigación</li>
-              <li className="hover:text-primary transition-colors cursor-pointer">Contacto</li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="font-semibold text-white mb-4">Contacto</h4>
-            <ul className="space-y-3 text-sm text-gray-400">
-              <li className="flex items-start gap-2"><MapPin className="h-4 w-4 shrink-0 mt-0.5 text-primary" /> Pedernera 275, CABA</li>
-              <li className="flex items-start gap-2"><Mail className="h-4 w-4 shrink-0 mt-0.5 text-primary" /> investigacion@uflo.edu.ar</li>
-              <li className="flex items-start gap-2"><Phone className="h-4 w-4 shrink-0 mt-0.5 text-primary" /> +54 11 4631-1100</li>
-            </ul>
+
+            {/* ENGLISH */}
+            <div className="pl-0 lg:pl-8 space-y-4 mt-8 lg:mt-0">
+              <LangLabel lang="EN" color="#f59e0b" />
+              <InfoCard icon={CheckCircle2} title="Organizational Culture & Training" color="#92400e">
+                Corporate hyper-exhaustion dynamics must be dismantled. Regular emotional management workshops and problematic consumption prevention help redefine safety and hygiene environments.
+              </InfoCard>
+              <InfoCard icon={CheckCircle2} title="Scientific Synergy (R&D)" color="#92400e">
+                Joint research lines with CONICET. Longitudinal studies measuring stress levels from shift schedules in the Neuquén Basin, generating solid scientific evidence.
+              </InfoCard>
+              <InfoCard icon={CheckCircle2} title="Public-Private Partnerships" color="#92400e">
+                Articulation with operators and unions to cross macroeconomic variables with wellbeing. Transforming research into unified protocols (Best Practices) endorsed by academia.
+              </InfoCard>
+            </div>
           </div>
         </div>
-      </footer>
+
+        {/* Footer */}
+        <footer className="w-full mt-auto bg-slate-100 rounded-t-[50px] py-12 px-4 md:px-12 lg:px-24 text-center border-t border-slate-200 relative z-20">
+          <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} className="mx-auto w-20 h-20 bg-[#8DC63F] rounded-full flex items-center justify-center text-white font-serif font-bold text-3xl mb-6 shadow-[0_10px_30px_rgba(141,198,63,0.3)]">
+            U
+          </motion.div>
+          <h2 className="font-serif text-3xl md:text-4xl text-slate-900 font-black mb-2">Contacto / Contact</h2>
+          <p className="text-slate-600 mb-8 max-w-lg mx-auto text-sm">Universidad de Flores • Offshore Technology Conference 2026</p>
+          <div className="flex justify-center gap-6 text-slate-500 text-xs">
+            <span className="flex flex-col items-center gap-1 hover:text-[#8DC63F] transition-colors"><MapPin className="h-5 w-5" /> Neuquén, AR</span>
+            <span className="flex flex-col items-center gap-1 hover:text-[#8DC63F] transition-colors"><Mail className="h-5 w-5" /> uflo@rectorado.edu.ar</span>
+          </div>
+          <div className="mt-12 pt-6 border-t border-slate-200 text-slate-400 text-xs">© 2026 Universidad de Flores • OTC Houston</div>
+        </footer>
+      </section>
+
     </main>
-  )
+  );
 }
 
-function FeatureCard({ icon: Icon, title, desc }: { icon: any, title: string, desc: string }) {
+/* ═══════════════════ MICRO COMPONENTS ═══════════════════ */
+
+function MetricCard({ topEs, topEn, value, suffix, sub, color }: any) {
   return (
-    <div className="group p-6 rounded-2xl bg-secondary/20 border border-white/5 hover:border-primary/50 transition-colors duration-300">
-      <div className="mb-4 inline-flex items-center justify-center h-12 w-12 rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-black transition-colors">
-        <Icon className="h-6 w-6" />
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }} 
+      whileInView={{ opacity: 1, y: 0 }} 
+      viewport={{ once: true }}
+      whileHover={{ scale: 1.05, y: -4 }}
+      className="relative bg-white/80 backdrop-blur-md rounded-2xl p-4 md:p-5 border border-slate-200 shadow-xl text-center overflow-hidden group cursor-default"
+      style={{ borderTopWidth: 4, borderTopColor: color }}
+    >
+      {/* Animated glow background */}
+      <motion.div
+        animate={{ opacity: [0.02, 0.08, 0.02] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute inset-0 rounded-2xl pointer-events-none"
+        style={{ background: `radial-gradient(ellipse at center top, ${color}30, transparent 70%)` }}
+      />
+      <p className="relative text-slate-500 text-[10px] md:text-xs uppercase tracking-wider mb-1 font-bold">{topEs} / {topEn}</p>
+      <div className="relative text-3xl md:text-5xl font-black" style={{ color }}>
+        <AnimatedCounter value={value} suffix={suffix} />
       </div>
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-muted-foreground text-sm">{desc}</p>
-    </div>
-  )
+      <p className="relative text-xs font-bold mt-1 text-slate-600">{sub}</p>
+    </motion.div>
+  );
 }
 
-function StatBox({ number, unit, desc, icon: Icon }: any) {
+function SectionHeader({ tagEs, tagEn, titleEs, titleEn, color, icon, field }: any) {
   return (
-    <div className="text-center p-6 rounded-2xl bg-secondary/30 border border-white/5 hover:border-primary/30 transition-colors">
-      {Icon && <Icon className="mx-auto h-8 w-8 text-primary mb-4 opacity-80" />}
-      <div className="text-4xl md:text-5xl font-bold text-primary mb-2">{number}</div>
-      <div className="text-sm font-semibold text-white mb-1">{unit}</div>
-      <div className="text-xs text-gray-500">{desc}</div>
-    </div>
-  )
-}
-
-function InsightCard({ icon: Icon, title, status, statusColor, desc }: any) {
-  return (
-    <div className="group p-6 rounded-2xl bg-secondary/20 border border-white/5 hover:border-white/20 transition-all flex gap-4">
-      <div className={`shrink-0 h-12 w-12 rounded-xl flex items-center justify-center ${statusColor}`}>
-        <Icon className="h-6 w-6" />
+    <div className="text-center max-w-4xl mx-auto">
+      <div className="inline-flex flex-wrap items-center justify-center gap-2 mb-3">
+        <span className="text-xs font-bold tracking-widest uppercase px-4 py-1 rounded-full" style={{ color, backgroundColor: `${color}15`, border: `1px solid ${color}30` }}>{tagEs} / {tagEn}</span>
+        <span className="text-xs font-bold px-4 py-1 rounded-full flex items-center gap-1" style={{ color, backgroundColor: `${color}10`, border: `1px solid ${color}20` }}>
+          {icon} {field}
+        </span>
       </div>
-      <div>
-        <div className="flex items-center gap-3 mb-2">
-          <h3 className="text-lg font-semibold">{title}</h3>
-          <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${statusColor}`}>{status}</span>
+      <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-slate-900">
+        {titleEs} <span className="text-slate-300 font-light">/</span> <span style={{ color }}>{titleEn}</span>
+      </h2>
+    </div>
+  );
+}
+
+function LangLabel({ lang, color }: { lang: string; color: string }) {
+  return (
+    <div className="flex items-center gap-2 mb-2">
+      <div className="w-8 h-[2px] rounded-full" style={{ backgroundColor: color }} />
+      <span className="text-xs font-black tracking-[0.3em] uppercase" style={{ color }}>{lang === "ES" ? "🇦🇷 Español" : "🇺🇸 English"}</span>
+      <div className="flex-1 h-[1px] bg-slate-200" />
+    </div>
+  );
+}
+
+function InfoCard({ icon: Icon, title, children, color }: any) {
+  return (
+    <div className="bg-white/70 backdrop-blur-sm border border-slate-200 rounded-2xl p-5 hover:bg-white transition-all group shadow-sm hover:shadow-md" style={{ borderLeftWidth: 3, borderLeftColor: color }}>
+      <div className="flex items-center gap-3 mb-3">
+        <div className="h-10 w-10 rounded-xl flex items-center justify-center border border-white/10" style={{ backgroundColor: `${color}15` }}>
+          <Icon className="h-5 w-5" style={{ color }} />
         </div>
-        <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
+        <h4 className="font-bold text-slate-900 text-base leading-tight">{title}</h4>
       </div>
+      <p className="text-slate-600 text-sm leading-relaxed">{children}</p>
     </div>
-  )
+  );
 }
 
-function MitigationItem({ num, text }: any) {
+function TLItem({ year, children, color }: any) {
   return (
-    <li className="flex items-start gap-4 p-4 rounded-xl bg-background/50 border border-white/5">
-      <span className="shrink-0 h-7 w-7 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold">{num}</span>
-      <span className="text-sm text-gray-300 mt-1">{text}</span>
-    </li>
-  )
+    <motion.div 
+      initial={{ opacity: 0, x: -15 }} 
+      whileInView={{ opacity: 1, x: 0 }} 
+      viewport={{ once: true }}
+      className="flex items-start gap-3 group"
+    >
+      <div className="flex flex-col items-center shrink-0">
+        <div className="w-3 h-3 rounded-full border-2 group-hover:scale-125 transition-transform" style={{ borderColor: color, backgroundColor: `${color}20` }} />
+        <div className="w-px h-full min-h-[20px] bg-slate-200" />
+      </div>
+      <div className="pb-3">
+        <span className="font-black text-lg" style={{ color }}>{year}</span>
+        <p className="text-slate-600 text-xs mt-0.5 leading-relaxed">{children}</p>
+      </div>
+    </motion.div>
+  );
 }
 
-function CommunityCard({ title, pop, desc, tags }: any) {
-  return (
-    <div className="p-5 rounded-2xl bg-secondary/20 border border-white/5">
-      <div className="flex items-center justify-between mb-3">
-        <h4 className="font-semibold text-lg">{title}</h4>
-        <span className="text-xs font-semibold bg-primary/20 text-primary px-2.5 py-1 rounded-full">{pop}</span>
-      </div>
-      <p className="text-sm text-gray-400 mb-4">{desc}</p>
-      <div className="flex gap-2 flex-wrap">
-        {tags.map((t: string) => (
-          <span key={t} className="text-xs bg-black text-gray-300 border border-white/10 px-2 py-1 rounded-md">{t}</span>
-        ))}
-      </div>
-    </div>
-  )
-}
