@@ -21,7 +21,7 @@ export default function Home() {
   const mapY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
   return (
-    <main ref={containerRef} className="relative bg-[#f8fafc] text-slate-900 selection:bg-[#8DC63F]/30 h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth w-full overflow-x-hidden">
+    <main ref={containerRef} className="relative bg-[#f8fafc] text-slate-900 selection:bg-[#8DC63F]/30 h-[100svh] overflow-y-auto snap-y snap-proximity scroll-smooth w-full overflow-x-hidden">
       
       <Navigation />
 

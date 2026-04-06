@@ -10,6 +10,7 @@ export default function Footer() {
         U
       </motion.div>
       <h2 className="font-serif text-3xl md:text-4xl text-slate-900 font-black mb-2">Contacto / Contact</h2>
+      <p className="text-[#8DC63F] font-bold md:text-lg mb-2">Conecta con el Equipo de Investigación UFLO</p>
       <p className="text-slate-600 mb-8 max-w-lg mx-auto text-sm">Universidad de Flores • Offshore Technology Conference 2026</p>
       <div className="flex justify-center gap-6 text-slate-500 text-xs">
         <span className="flex flex-col items-center gap-1 hover:text-[#8DC63F] transition-colors">

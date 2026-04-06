@@ -5,7 +5,7 @@ import InfoCard from "@/components/ui/InfoCard";
 
 export default function SocialSection() {
   return (
-    <section id="social" className="relative z-10 w-full min-h-[100svh] snap-start snap-always flex flex-col justify-center bg-slate-50/60 backdrop-blur-md border-t border-slate-100 py-20 px-4 md:px-8 lg:px-16">
+    <section id="social" className="relative z-10 w-full min-h-[100svh] snap-start md:snap-always flex flex-col justify-center bg-slate-50/60 backdrop-blur-md border-t border-slate-100 py-20 px-4 md:px-8 lg:px-16">
       <SectionHeader tagEs="Pilar 2: Factor Humano" tagEn="Pillar 2: Human Factor" titleEs="Impacto Social" titleEn="Social Impact" color="#3b82f6" icon={<Stethoscope className="w-4 h-4" />} field="Psicología Laboral / Occupational Psychology" />
 
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-0 mt-8">

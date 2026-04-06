@@ -12,7 +12,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section id="hero" className="relative z-10 w-full min-h-[100svh] snap-start snap-always flex flex-col items-center justify-center overflow-hidden py-28 px-4 md:px-12 lg:px-20">
+    <section id="hero" className="relative z-10 w-full min-h-[100svh] snap-start md:snap-always flex flex-col items-center justify-center overflow-hidden py-28 px-4 md:px-12 lg:px-20">
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 mix-blend-overlay pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center text-center gap-8">

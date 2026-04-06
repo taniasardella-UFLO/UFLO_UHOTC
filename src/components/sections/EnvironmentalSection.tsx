@@ -5,7 +5,7 @@ import InfoCard from "@/components/ui/InfoCard";
 
 export default function EnvironmentalSection() {
   return (
-    <section id="ambiental" className="relative z-10 w-full min-h-[100svh] snap-start snap-always flex flex-col justify-center bg-white/40 backdrop-blur-sm py-20 px-4 md:px-8 lg:px-16">
+    <section id="ambiental" className="relative z-10 w-full min-h-[100svh] snap-start md:snap-always flex flex-col justify-center bg-white/40 backdrop-blur-sm py-20 px-4 md:px-8 lg:px-16">
       <SectionHeader tagEs="Pilar 1: Sostenibilidad" tagEn="Pillar 1: Sustainability" titleEs="Impacto Ambiental" titleEn="Environmental Impact" color="#22c55e" icon={<Microscope className="w-4 h-4" />} field="Ciencias Naturales / Natural Sciences" />
 
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-0 mt-8">

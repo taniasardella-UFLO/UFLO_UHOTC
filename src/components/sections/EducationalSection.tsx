@@ -5,7 +5,7 @@ import InfoCard from "@/components/ui/InfoCard";
 
 export default function EducationalSection() {
   return (
-    <section id="educacional" className="relative z-10 w-full min-h-[100svh] snap-start snap-always flex flex-col pt-20 bg-white/90 backdrop-blur-lg border-t border-slate-100 justify-between">
+    <section id="educacional" className="relative z-10 w-full min-h-[100svh] snap-start md:snap-always flex flex-col pt-20 bg-white/90 backdrop-blur-lg border-t border-slate-100 justify-between">
       <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-16 mb-10">
         <SectionHeader tagEs="Pilar 3: Estrategia" tagEn="Pillar 3: Strategy" titleEs="Impacto Educacional I+D" titleEn="Educational Impact R&D" color="#f59e0b" icon={<HardHat className="w-4 h-4" />} field="Seguridad e Higiene / Industrial Safety" />
 
