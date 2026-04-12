@@ -30,10 +30,10 @@ export default function EnvironmentalSection() {
         <div className="pl-0 lg:pl-8 space-y-4 mt-8 lg:mt-0">
           <LangLabel lang="EN" color="#22c55e" />
           <InfoCard icon={TreePine} title="Ecosystems & Biodiversity" color="#166534">
-            Infrastructure expansion generates habitat fragmentation, native fauna displacement, and biological community simplification. These processes affect arid ecosystems and riparian environments, compromising ecological connectivity and ecosystem services.
+            The infrastructure expansion generates habitat fragmentation, native fauna displacement, and biological community simplification. These processes affect arid ecosystems and riparian environments, compromising ecological connectivity and ecosystem services.
           </InfoCard>
           <InfoCard icon={Droplets} title="Water Resources" color="#166534">
-            Intensive water use for hydraulic fracturing, aquifer contamination risk, effluent generation, and increasing pressure on local basins constitute critical variables for both ecosystems and communities.
+            Intensive water use for hydraulic fracturing, aquifer contamination and pollution risk, effluent generation, and increasing pressure on local basins constitute critical variables for both ecosystems and communities.
           </InfoCard>
           <InfoCard icon={Wind} title="Emissions & Air Quality" color="#166534">
             Operations generate emissions from flaring, gas venting, heavy machinery transit, and volatile organic compounds. They impact local air quality and contribute to global climate change.

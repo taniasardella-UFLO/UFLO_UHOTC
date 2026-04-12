@@ -35,7 +35,7 @@ export default function HeroSection() {
           className="text-base md:text-lg text-slate-700 font-medium max-w-2xl leading-relaxed bg-white/60 backdrop-blur-xl rounded-2xl px-6 py-4 border border-slate-200 shadow-lg"
         >
           El aporte estratégico desde la academia: sostenibilidad integral.<br/>
-          <span className="text-[#8DC63F] italic font-semibold">The strategic contribution from academia: integral sustainability.</span>
+          <span className="text-[#8DC63F] italic font-semibold">The strategic contribution from the academic area: integral sustainability.</span>
         </motion.p>
 
         {/* Bilingual Metrics */}

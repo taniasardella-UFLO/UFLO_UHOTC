@@ -34,17 +34,17 @@ export default function EducationalSection() {
             <LangLabel lang="EN" color="#f59e0b" />
             
             <p className="text-slate-600 text-sm mb-4 leading-relaxed font-medium">
-              For interventions in the social, labor, and environmental fields to be scalable and effective, Academia cannot operate in isolation. We propose the formation of an applied innovation ecosystem below, focused on the development of these interrelated factors:
+              For interventions in the social, labor, and environmental fields to be scalable and effective, the academic area cannot operate in isolation. Below, we propose the formation of an applied innovation ecosystem, focused on the development of these interrelated factors:
             </p>
 
             <InfoCard icon={CheckCircle2} title="Scientific-Academic Synergy" color="#92400e">
-              It is imperative to structure joint research lines with other universities, research centers, and various scientific spaces. The objective is to conduct longitudinal studies measuring the impact of shift schedules, isolation, and stress levels in the Neuquén Basin, generating scientific evidence and rigorous data on organizational behavior in this particular ecosystem.
+              It is imperative to structure joint research lines with other universities, research centers, and various scientific fields. The objective is to conduct longitudinal studies measuring the impact of shift schedules, isolation, and stress levels in the Neuquén Basin, generating scientific evidence and rigorous data on organizational behavior in this particular ecosystem.
             </InfoCard>
             <InfoCard icon={CheckCircle2} title="Public-Private Strategic Alliances" color="#92400e">
               Addressing social, environmental, and labor issues requires transverse articulation. The university must integrate its research with legislative and governmental sectors for policymaking, alongside the private sector. Working together will consolidate a sustainable framework integrating high productivity in the Neuquén Basin while ensuring wellbeing and sustainable work.
             </InfoCard>
             <InfoCard icon={CheckCircle2} title="Tech Transfer & Best Practices" color="#92400e">
-              The goal of this R&D network is transforming research into concrete actions. By generating scientific evidence through an interdisciplinary approach, the process is supported with an integrative perspective from Academia. The purpose is to contribute to operational improvements by adopting evidence-based best practices, thus ensuring that integral wellbeing sustains the project&apos;s long-term viability.
+              The goal of this R&D network is transforming research into concrete actions. By generating scientific evidence through an interdisciplinary approach, the process is supported with an integrative perspective from the academic area. The purpose is to contribute to operational improvements by adopting evidence-based best practices, thus ensuring that integral wellbeing sustains the project&apos;s long-term feasibility.
             </InfoCard>
           </div>
         </div>
